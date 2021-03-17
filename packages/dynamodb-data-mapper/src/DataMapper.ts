@@ -104,18 +104,21 @@ export class DataMapper {
     private readonly readConsistency: ReadConsistency;
     private readonly skipVersionCheck: boolean;
     private readonly tableNamePrefix: string;
+    private readonly tableNameSuffix: string;
 
     constructor({
         client,
         readConsistency = 'eventual',
         skipVersionCheck = false,
-        tableNamePrefix = ''
+        tableNamePrefix = '',
+        tableNameSuffix = '',
     }: DataMapperConfiguration) {
         client.config.customUserAgent = ` dynamodb-data-mapper-js/${VERSION}`;
         this.client = client;
         this.readConsistency = readConsistency;
         this.skipVersionCheck = skipVersionCheck;
         this.tableNamePrefix = tableNamePrefix;
+        this.tableNameSuffix = tableNameSuffix;
     }
 
     /**
@@ -708,6 +711,7 @@ export class DataMapper {
                 readConsistency: this.readConsistency,
                 ...options,
                 tableNamePrefix: this.tableNamePrefix,
+                tableNameSuffix: this.tableNameSuffix,
             }
         );
     }
@@ -862,6 +866,7 @@ export class DataMapper {
                 readConsistency: this.readConsistency,
                 ...options,
                 tableNamePrefix: this.tableNamePrefix,
+                tableNameSuffix: this.tableNameSuffix,
             }
         );
     }
@@ -916,6 +921,7 @@ export class DataMapper {
                 readConsistency: this.readConsistency,
                 ...options,
                 tableNamePrefix: this.tableNamePrefix,
+                tableNameSuffix: this.tableNameSuffix,
             }
         );
     }
@@ -1072,7 +1078,7 @@ export class DataMapper {
         options: ExecuteUpdateExpressionOptions = {}
     ): Promise<T> {
         const req: UpdateItemInput = {
-            TableName: this.tableNamePrefix + tableName,
+            TableName: this.tableNamePrefix + tableName + this.tableNameSuffix,
             ReturnValues: 'ALL_NEW',
             Key: marshallKey(schema, key),
         };
@@ -1118,7 +1124,7 @@ export class DataMapper {
     }
 
     private getTableName(item: StringToAnyObjectMap): string {
-        return getTableName(item, this.tableNamePrefix);
+        return getTableName(item, this.tableNamePrefix, this.tableNameSuffix);
     }
 
     private async *mapGetBatch<T extends StringToAnyObjectMap>(
@@ -1129,7 +1135,7 @@ export class DataMapper {
     ): AsyncIterableIterator<[string, AttributeMap]> {
         for await (const item of items) {
             const unprefixed = getTableName(item);
-            const tableName = this.tableNamePrefix + unprefixed;
+            const tableName = this.tableNamePrefix + unprefixed + this.tableNameSuffix;
             const schema = getSchema(item);
 
             if (unprefixed in options && !(tableName in convertedOptions)) {
@@ -1163,7 +1169,7 @@ export class DataMapper {
     ): AsyncIterableIterator<[string, WriteRequest]> {
         for await (const [type, item] of items) {
             const unprefixed = getTableName(item);
-            const tableName = this.tableNamePrefix + unprefixed;
+            const tableName = this.tableNamePrefix + unprefixed + this.tableNameSuffix;
             const schema = getSchema(item);
 
             if (!(tableName in state)) {

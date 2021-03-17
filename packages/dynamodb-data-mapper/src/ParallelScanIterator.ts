@@ -15,7 +15,7 @@ export class ParallelScanIterator<T> extends
         client: DynamoDB,
         itemConstructor: ZeroArgumentsConstructor<T>,
         segments: number,
-        options: ParallelScanOptions & { tableNamePrefix?: string } = {}
+        options: ParallelScanOptions & { tableNamePrefix?: string, tableNameSuffix?: string } = {}
     ) {
         super(new ParallelScanPaginator(
             client,

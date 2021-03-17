@@ -25,11 +25,12 @@ export function buildScanInput<T>(
         segment,
         startKey,
         tableNamePrefix: prefix,
+        tableNameSuffix: suffix,
         totalSegments,
     } = options;
 
     const req: ScanInput = {
-        TableName: getTableName(valueConstructor.prototype, prefix),
+        TableName: getTableName(valueConstructor.prototype, prefix, suffix),
         Limit: pageSize,
         IndexName: indexName,
         Segment: segment,

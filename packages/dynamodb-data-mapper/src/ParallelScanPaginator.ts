@@ -33,7 +33,7 @@ export class ParallelScanPaginator<T> extends Paginator<T> {
         client: DynamoDB,
         itemConstructor: ZeroArgumentsConstructor<T>,
         segments: number,
-        options: ParallelScanOptions & { tableNamePrefix?: string } = {}
+        options: ParallelScanOptions & { tableNamePrefix?: string, tableNameSuffix?: string } = {}
     ) {
         const schema = getSchema(itemConstructor.prototype);
         const input: ParallelScanInput = {

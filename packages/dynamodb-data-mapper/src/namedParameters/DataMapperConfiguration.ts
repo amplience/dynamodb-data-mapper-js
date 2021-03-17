@@ -24,4 +24,9 @@ export interface DataMapperConfiguration {
      * A prefix to apply to all table names.
      */
     tableNamePrefix?: string;
+
+    /**
+     * A suffix to apply to all table names.
+     */
+     tableNameSuffix?: string;
 }

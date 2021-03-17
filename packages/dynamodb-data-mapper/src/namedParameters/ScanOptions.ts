@@ -164,6 +164,6 @@ export type ParallelScanParameters<
 /**
  * @internal
  */
-export type SequentialScanOptions = (ScanOptions|ParallelScanWorkerOptions) & {tableNamePrefix?: string};
+export type SequentialScanOptions = (ScanOptions|ParallelScanWorkerOptions) & {tableNamePrefix?: string, tableNameSuffix?: string};
 
 

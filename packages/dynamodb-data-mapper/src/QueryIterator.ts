@@ -18,7 +18,7 @@ export class QueryIterator<T> extends Iterator<T, QueryPaginator<T>> {
         valueConstructor: ZeroArgumentsConstructor<T>,
         keyCondition: ConditionExpression |
             {[propertyName: string]: ConditionExpressionPredicate|any},
-        options?: QueryOptions & {tableNamePrefix?: string}
+        options?: QueryOptions & {tableNamePrefix?: string, tableNameSuffix?: string}
     ) {
         super(
             new QueryPaginator(client, valueConstructor, keyCondition, options)

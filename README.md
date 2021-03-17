@@ -45,6 +45,7 @@ import DynamoDB = require('aws-sdk/clients/dynamodb');
 const mapper = new DataMapper({
     client: new DynamoDB({region: 'us-west-2'}), // the SDK client used to execute operations
     tableNamePrefix: 'dev_' // optionally, you can provide a table prefix to keep your dev and prod tables separate
+    tableNameSuffix: '_1' // optionally, you can provide a table suffix. Useful for CDK orchestrated stacks
 });
 ```
 

@@ -28,7 +28,7 @@ export class QueryPaginator<T> extends Paginator<T> {
         valueConstructor: ZeroArgumentsConstructor<T>,
         keyCondition: ConditionExpression |
             {[propertyName: string]: ConditionExpressionPredicate|any},
-        options: QueryOptions & {tableNamePrefix?: string} = {}
+        options: QueryOptions & {tableNamePrefix?: string, tableNameSuffix?: string} = {}
     ) {
         const itemSchema = getSchema(valueConstructor.prototype);
 
@@ -42,10 +42,11 @@ export class QueryPaginator<T> extends Paginator<T> {
             scanIndexForward,
             startKey,
             tableNamePrefix: prefix,
+            tableNameSuffix: suffix,
         } = options;
 
         const req: QueryInput = {
-            TableName: getTableName(valueConstructor.prototype, prefix),
+            TableName: getTableName(valueConstructor.prototype, prefix, suffix),
             ScanIndexForward: scanIndexForward,
             Limit: pageSize,
             IndexName: indexName,

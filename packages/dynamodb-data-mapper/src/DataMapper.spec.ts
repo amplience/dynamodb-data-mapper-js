@@ -694,7 +694,7 @@ describe('DataMapper', () => {
 
         const mapper = new DataMapper({
             client: mockDynamoDbClient as any,
-        });    
+        });
 
         class Item {
             get [DynamoDbTable]() { return 'foo' }
@@ -1372,6 +1372,25 @@ describe('DataMapper', () => {
         );
 
         it(
+            'should apply a table name suffix provided to the mapper constructor',
+            async () => {
+                const tableNameSuffix = '_ABC123';
+                const mapper = new DataMapper({
+                    client: mockDynamoDbClient as any,
+                    tableNameSuffix,
+                });
+                const tableName = 'foo';
+                await mapper.delete({
+                    [DynamoDbTable]: tableName,
+                    [DynamoDbSchema]: {},
+                });
+
+                expect((mockDynamoDbClient.deleteItem.mock.calls[0] as any)[0])
+                    .toMatchObject({TableName: tableName + tableNameSuffix});
+            }
+        );
+
+        it(
             'should marshall the supplied key according to the schema',
             async () => {
                 await mapper.delete({
@@ -1800,7 +1819,7 @@ describe('DataMapper', () => {
         const describeTablePromiseFunc = jest.fn(() => Promise.resolve({
             Table: {
                 TableStatus: 'ACTIVE',
-                GlobalSecondaryIndexes: [ 
+                GlobalSecondaryIndexes: [
                     {
                         IndexName: 'DescriptionIndex'
                     }

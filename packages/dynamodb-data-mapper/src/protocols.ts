@@ -67,11 +67,11 @@ export function getSchema(item: any): Schema {
  */
 export const DynamoDbTable = Symbol('DynamoDbTableName');
 
-export function getTableName(item: any, tableNamePrefix: string = ''): string {
+export function getTableName(item: any, tableNamePrefix: string = '', tableNameSuffix: string = ''): string {
     if (item) {
         const tableName = item[DynamoDbTable];
         if (typeof tableName === 'string') {
-            return tableNamePrefix + tableName;
+            return tableNamePrefix + tableName + tableNameSuffix;
         }
     }
 
