@@ -5,7 +5,7 @@ import {
     unmarshallItem,
     ZeroArgumentsConstructor,
 } from '@aws/dynamodb-data-marshaller';
-import { ConsumedCapacity } from 'aws-sdk/clients/dynamodb';
+import { AttributeMap, ConsumedCapacity } from 'aws-sdk/clients/dynamodb';
 
 require('./asyncIteratorSymbolPolyfill');
 
@@ -91,7 +91,7 @@ export abstract class Paginator<T> implements AsyncIterableIterator<Array<T>> {
                 );
 
                 return {
-                    value: (value.Items || []).map(item => unmarshallItem(
+                    value: (value.Items as AttributeMap[] || []).map(item => unmarshallItem(
                         this.itemSchema,
                         item,
                         this.valueConstructor
