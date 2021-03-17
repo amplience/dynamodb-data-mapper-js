@@ -1,0 +1,32 @@
+name: build-dynamodb-data-mapper-js
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up to use nodejs 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          check-latest: true
+
+      - name: build
+        run: |
+          npm i
+          npm run bootstrap
+          npm run test
+
+      - name : Publish all (main branch only)
+        # if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.email "github-actions@amplience.com"
+          git config --global user.name "Github Actions"
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
