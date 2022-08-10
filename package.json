@@ -5,7 +5,8 @@
     "bootstrap": "lerna bootstrap",
     "docs": "typedoc src && lerna run docs",
     "pretest": "lerna run pretest",
-    "test": "jest"
+    "test": "jest",
+    "pack": "lerna exec npm pack"
   },
   "author": {
     "name": "AWS SDK for JavaScript Team",
